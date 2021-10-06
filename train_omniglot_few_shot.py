@@ -8,6 +8,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+import dataset_omniglot
+
 
 class CNNEncoder(nn.Module):
     def __init__(self):
@@ -47,7 +49,7 @@ class RelationNetwork(nn.Module):
     def __init__(self, input_size, hidden_size):
         super(RelationNetwork, self).__init__()
         self.layer1 = nn.Sequential(
-            nn.Conv2d(128, 64, kernel_size=3, padding=1), # why is in_channel 128? because after feature concatenation.
+            nn.Conv2d(128, 64, kernel_size=3, padding=1),  # why is in_channel 128? because after feature concatenation.
             nn.BatchNorm2d(64, momentum=1, affine=True),
             nn.ReLU(),
             nn.MaxPool2d(2)
@@ -75,5 +77,39 @@ def weights_init(m):
 
 
 def main():
+    episode = 1000000
+    GPU = 0
+    learning_rate = 0.001
+    num_class = 5
+    batch_num_per_class = 15
+    sample_num_per_class = 5
+
     cnn_encoder = CNNEncoder()
     relation_network = RelationNetwork(64, 8)
+
+    cnn_encoder.apply(weights_init)
+    relation_network.apply(weights_init)
+
+    cnn_encoder.cuda(GPU)
+    relation_network.cuda(GPU)
+
+    characters_train, characters_val = dataset_omniglot.omniglot_folders()
+
+    # print(cnn_encoder.parameters(), relation_network.parameters())
+
+    cnn_encoder_optim = torch.optim.Adam(cnn_encoder.parameters(), lr=learning_rate)
+    cnn_encoder_scheduler = StepLR(cnn_encoder_optim, step_size=100000, gamma=0.5)
+    relation_network_optim = torch.optim.Adam(relation_network.parameters(), lr=learning_rate)
+    relation_network_scheduler = StepLR(relation_network_optim, step_size=100000, gamma=0.5)
+
+    for e in range(episode):
+        cnn_encoder_scheduler.step(e)
+        relation_network_scheduler.step(e)
+
+        degrees = random.choice([0, 90, 180, 270])
+        task = dataset_omniglot.OmniglotTask(characters_train, num_class, sample_num_per_class, batch_num_per_class)
+        break
+
+
+if __name__ == '__main__':
+    main()
