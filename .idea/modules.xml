@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../omniglot/.idea/omniglot.iml" filepath="$PROJECT_DIR$/../omniglot/.idea/omniglot.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/relation_network.iml" filepath="$PROJECT_DIR$/.idea/relation_network.iml" />
     </modules>
   </component>

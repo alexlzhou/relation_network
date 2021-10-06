@@ -75,4 +75,5 @@ def weights_init(m):
 
 
 def main():
-    
+    cnn_encoder = CNNEncoder()
+    relation_network = RelationNetwork(64, 8)
