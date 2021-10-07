@@ -108,7 +108,12 @@ def main():
 
         degrees = random.choice([0, 90, 180, 270])
         task = dataset_omniglot.OmniglotTask(characters_train, num_class, sample_num_per_class, batch_num_per_class)
-        break
+        train_dataloader = dataset_omniglot.get_data_loader(task, num_per_class=sample_num_per_class, split='train',
+                                                            shuffle=False, rotation=degrees)
+        test_dataloader = dataset_omniglot.get_data_loader(task, num_per_class=sample_num_per_class, split='test',
+                                                            shuffle=True, rotation=degrees)
+
+        train_images, train_labels = train_dataloader.__iter__().next()
 
 
 if __name__ == '__main__':
