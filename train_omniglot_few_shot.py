@@ -194,7 +194,7 @@ def main():
 
                 total_rewards += np.sum(rewards)
 
-            test_accuracy = total_rewards / 1.0 / num_class / sample_num_per_class /
+            test_accuracy = total_rewards / 1.0 / num_class / sample_num_per_class / test_episode
 
             print('test_accuracy: ', test_accuracy)
 
