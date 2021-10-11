@@ -39,9 +39,9 @@ def get_data_loader(task, num_per_class=1, split='train', shuffle=True, rotation
                        transform=transforms.Compose([Rotate(rotation), transforms.ToTensor(), normalize]))
 
     if split == 'train':
-        sampler = ClassBalancedSampler(num_per_class, task.num_classes, task.train_num, shuffle=shuffle)
+        sampler = ClassBalancedSampler(num_per_class, task.num_classes, task.num_train, shuffle=shuffle)
     else:
-        sampler = ClassBalancedSampler(num_per_class, task.num_classes, task.test_num, shuffle=shuffle)
+        sampler = ClassBalancedSampler(num_per_class, task.num_classes, task.num_test, shuffle=shuffle)
 
     loader = DataLoader(dataset, batch_size=num_per_class * task.num_classes, sampler=sampler)
 
