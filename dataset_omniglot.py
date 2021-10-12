@@ -106,6 +106,8 @@ class Omniglot(FewShotDataset):
         image = image.resize((28, 28), resample=Image.LANCZOS)
         # image = np.array(image, dtype=np.float32)
         if self.transform is not None:
+            print(image_root)
+            print(image)
             image = self.transform(image)
         label = self.labels[idx]
         if self.target_transform is not None:
