@@ -34,7 +34,8 @@ def omniglot_folders():
 
 
 def get_data_loader(task, num_per_class=1, split='train', shuffle=True, rotation=0):
-    normalize = transforms.Normalize(mean=[0.92206, 0.92206, 0.92206], std=[0.08426, 0.08426, 0.08426])
+    # normalize = transforms.Normalize(mean=[0.92206, 0.92206, 0.92206], std=[0.08426, 0.08426, 0.08426])
+    normalize = transforms.Normalize(mean=0.92206, std=0.08426)
     dataset = Omniglot(task, split=split,
                        transform=transforms.Compose([Rotate(rotation), transforms.ToTensor(), normalize]))
 
@@ -101,13 +102,13 @@ class Omniglot(FewShotDataset):
 
     def __getitem__(self, idx):
         image_root = self.image_roots[idx]
+        # image_root = image_root.replace('\\', '/')
         image = Image.open(image_root)
+        # image.load()
         image = image.convert('L')
         image = image.resize((28, 28), resample=Image.LANCZOS)
         # image = np.array(image, dtype=np.float32)
         if self.transform is not None:
-            print(image_root)
-            print(image)
             image = self.transform(image)
         label = self.labels[idx]
         if self.target_transform is not None:
@@ -164,4 +165,4 @@ class Rotate(object):
 
     def __call__(self, x, mode='reflect'):
         x = x.rotate(self.angle)
-        return
+        return x
