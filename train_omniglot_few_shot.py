@@ -132,7 +132,7 @@ def main():
         test_features_ext = test_features.unsqueeze(0).repeat(num_class, 1, 1, 1, 1)
         test_features_ext = torch.transpose(test_features_ext, 0, 1)
 
-        relation_pair = torch.cat((train_features_ext, test_features_ext), 2).view(-1, feature_dim * 2, 5, 5)
+        relation_pair = torch.cat((train_features_ext, test_features_ext), 0).view(-1, feature_dim * 2, 5, 5)
         relations = relation_network(relation_pair).view(-1, num_class)
 
         mse = nn.MSELoss().cuda(GPU)
