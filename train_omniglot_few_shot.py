@@ -124,7 +124,8 @@ def main():
 
         train_features = cnn_encoder(Variable(train_images).cuda(GPU))
         train_features = train_features.view(num_class, sample_num_per_class, feature_dim, 5, 5)
-        train_features = torch.sum(train_features, 1).squeeze(1)
+        train_features = torch.sum(train_features, 1)
+        train_features = train_features.squeeze(1)
         test_features = cnn_encoder(Variable(test_images).cuda(GPU))
 
         # calculate relations
