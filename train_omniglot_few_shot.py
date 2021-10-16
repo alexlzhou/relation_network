@@ -132,12 +132,13 @@ def main():
         test_features_ext = test_features.unsqueeze(0).repeat(num_class, 1, 1, 1, 1)
         test_features_ext = torch.transpose(test_features_ext, 0, 1)
 
+        # a = torch.cat((train_features_ext, test_features_ext), 0)
         relation_pair = torch.cat((train_features_ext, test_features_ext), 0).view(-1, feature_dim * 2, 5, 5)
         relations = relation_network(relation_pair).view(-1, num_class)
 
         mse = nn.MSELoss().cuda(GPU)
         one_hot_labels = Variable(
-            torch.zeros(batch_num_per_class * num_class, num_class).scatter_(1, test_labels.view(-1, 1), 1)).cuda(GPU)
+            torch.zeros(batch_num_per_class * num_class, num_class).scatter_(1, test_labels.type(torch.int64).view(-1, 1), 1)).cuda(GPU)
         loss = mse(relations, one_hot_labels)
 
         # training
